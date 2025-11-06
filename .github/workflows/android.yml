@@ -110,7 +110,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-split
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
 
       # 1️⃣4️⃣ Upload APK to AWS S3 (Optional)
       - name: ☁️ Upload APK to S3
@@ -120,7 +120,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
           S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          APK_PATH: android/app/build/outputs/apk/debug/*.apk
+          APK_PATH: android/app/build/outputs/apk/debug/app-debug.apk
           S3_DESTINATION: ${{ github.event.repository.name }}/debug-${{ github.run_number }}.apk
         run: |
           echo "🔍 Checking APK at $APK_PATH..."
