@@ -36,6 +36,11 @@ jobs:
       PROFILE_APP_NAME: nvRNLiveAcTestAppMainTargetAdHocDistribProfile
       PROFILE_EXT_NAME: nvRNLiveAcTestAppServExtTargetAdHocDistribProfile
 
+      # App Store Connect API Keys (from GitHub Secrets)
+      APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+
     steps:
       # -------------------------
       # 1️⃣ Checkout
@@ -93,6 +98,15 @@ jobs:
           sed -i '' 's/"basedOnDependencyAnalysis" = YES;/"basedOnDependencyAnalysis" = NO;/g' \
             nvRNSDKLiveAccountTestApp.xcodeproj/project.pbxproj
           cd ..
+
+      # -------------------------------------------------
+      # 5. Auto-Increment Build Number
+      # -------------------------------------------------
+      - name: 🔢 Auto-Increment iOS Build Number
+        run: |
+          BUILD_NUMBER="${{ github.run_number }}"
+          echo "Using CFBundleVersion: $BUILD_NUMBER"
+          plutil -replace CFBundleVersion -string "$BUILD_NUMBER" ios/Runner/Info.plist
 
       # -------------------------
       # 6️⃣ Decrypt Signing Assets
@@ -184,13 +198,43 @@ jobs:
           echo "📦 Exporting .ipa..."
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
-            -exportPath "$PWD/build" \
+            -exportPath "$PWD/build/export" \
             -exportOptionsPlist ExportOptions.plist \
             -allowProvisioningUpdates \
             -verbose | tee export.log
 
-          ls -la build/*.ipa || echo "❌ No IPA found!"
-          cd ..
+          echo "✅ Generated IPA files:"
+          ls -la build/export/*.ipa
+
+
+      # -------------------------------------------------
+      # 12. Upload IPA to TestFlight (Fastlane Deliver)
+      # -------------------------------------------------
+      - name: 🚀 Upload IPA to TestFlight
+        run: |
+          echo "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode > AuthKey.p8
+  
+          KEY_CONTENT=$(awk '{printf "%s\\n", $0}' AuthKey.p8 | sed 's/"/\\"/g')
+  
+          cat > fastlane_api_key.json <<EOF
+          {
+            "key_id": "$APP_STORE_CONNECT_API_KEY_ID",
+            "issuer_id": "$APP_STORE_CONNECT_ISSUER_ID",
+            "key": "$KEY_CONTENT",
+            "in_house": false
+          }
+          EOF
+  
+          sudo gem install fastlane -N
+  
+          fastlane deliver \
+            --api_key_path fastlane_api_key.json \
+            --ipa ios/build/export/*.ipa \
+            --skip_screenshots \
+            --skip_metadata \
+            --run_precheck_before_submit false \
+            --force \
+            --verbose
 
       # -------------------------
       # 1️⃣2️⃣ Upload Artifacts
