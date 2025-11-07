@@ -1,4 +1,4 @@
-name: iOS • Build & TestFlight
+name: iOS CI – Build & Upload to TestFlight
 
 on:
   push:
@@ -16,251 +16,188 @@ on:
       - 'tsconfig.json'
       - '.github/workflows/ios.yml'
 
-concurrency:
-  group: ios-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
 jobs:
-  build-ios:
-    name: 📦 Build iOS & 🚀 Upload to TestFlight
+  ios-build:
+    name: 📱 iOS Build & TestFlight Upload
     runs-on: macos-latest
-    timeout-minutes: 60
 
     env:
-      # ---- React Native / Build Flags
       CI: true
       USE_HERMES: "1"
-      RCT_NO_LAUNCH_PACKAGER: "true"
       NO_FLIPPER: "1"
+      RCT_NO_LAUNCH_PACKAGER: "true"
 
-      # ---- Xcode / Project
+      # Xcode Project Config
       APP_SCHEME: nvRNSDKLiveAccountTestApp
       WORKSPACE: nvRNSDKLiveAccountTestApp.xcworkspace
-      CONFIGURATION: app_store                 # Uses app-store export method for TestFlight
+      CONFIGURATION: app_store
       DEVELOPMENT_TEAM: 4JW4924F8P
-      PROFILE_APP_NAME: nvRNLiveAcTestAppMainTargetAdHocDistribProfile
-      PROFILE_EXT_NAME: nvRNLiveAcTestAppServExtTargetAdHocDistribProfile
 
-      # ---- App Store Connect (from GitHub Secrets)
-      ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-      ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-      ASC_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
+      # Provisioning Profile Names (must match Xcode)
+      PROFILE_APP_NAME: nvRNLiveAcTestAppMainTargetReleaseDistribProfile
+      PROFILE_EXT_NAME: nvRNLiveAcTestAppServicExtTargetReleaseDistProfile
+
+      # ASC Keys (stored as secrets)
+      APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
 
     steps:
-      # 0) Safer shell defaults
-      - name: 🔧 Configure safer shell
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "::group::System & Xcode"
-          sw_vers || true
-          xcodebuild -version || true
-          echo "::endgroup::"
+    # ---------------------------------------------------
+    # 1. Checkout
+    # ---------------------------------------------------
+    - name: ⬇️ Checkout Repository
+      uses: actions/checkout@v4
 
-      # 1) Checkout
-      - name: ⬇️ Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    # ---------------------------------------------------
+    # 2. Node Setup
+    # ---------------------------------------------------
+    - name: 🟦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
 
-      # 2) Node
-      - name: 🟦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
+    # ---------------------------------------------------
+    # 3. Cache node_modules
+    # ---------------------------------------------------
+    - name: 📦 Cache Node Modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          nvRNSDKLiveAccountTestApp/node_modules
+        key: node-${{ runner.os }}-${{ hashFiles('nvRNSDKLiveAccountTestApp/package-lock.json') }}
+        restore-keys: |
+          node-${{ runner.os }}-
 
-      # 3) Cache node_modules (project-level)
-      - name: ♻️ Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            npm-${{ runner.os }}-
+    # ---------------------------------------------------
+    # 4. Install JS Dependencies
+    # ---------------------------------------------------
+    - name: 📥 Install JavaScript Dependencies
+      run: npm ci --legacy-peer-deps
 
-      # 4) Install JS deps (clean & deterministic)
-      - name: 📦 Install JS dependencies
-        run: npm ci --legacy-peer-deps
+    # ---------------------------------------------------
+    # 5. Install iOS Pods
+    # ---------------------------------------------------
+    - name: 📚 Install CocoaPods
+      run: |
+        cd ios
+        pod install --repo-update
 
-      # 5) CocoaPods cache (keyed by Podfile.lock)
-      - name: ♻️ Cache Pods
-        uses: actions/cache@v4
-        with:
-          path: ios/Pods
-          key: pods-${{ runner.os }}-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            pods-${{ runner.os }}-
+    # ---------------------------------------------------
+    # 6. Auto-Increment Build Number
+    # ---------------------------------------------------
+    - name: 🔢 Update iOS Build Number
+      run: |
+        BUILD_NUMBER=${{ github.run_number }}
+        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" ios/${APP_SCHEME}/Info.plist
 
-      # 6) Install Pods
-      - name: 🧰 Install CocoaPods
-        working-directory: ios
-        run: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          pod repo update
-          pod install
+    # ---------------------------------------------------
+    # 7. Decrypt Certificates & Profiles
+    # ---------------------------------------------------
+    - name: 🔐 Decrypt Certificates
+      env:
+        CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+      run: |
+        mkdir -p ios/certs
+        for f in appleDistribution.p12 main_Target_release.mobileprovision ext_Target_release.mobileprovision; do
+          openssl aes-256-cbc -k "$CERT_PASSWORD" -in "pf_ios/${f}.enc" -out "ios/certs/${f}" -d
+        done
 
-      # 7) (Optional) Ensure RN bundling – ok to keep for CI predictability
-      - name: 🧵 Bundle React Native JS
-        run: |
-          npx react-native bundle \
-            --entry-file index.js \
-            --platform ios \
-            --dev false \
-            --bundle-output ios/main.jsbundle \
-            --assets-dest ios
+    # ---------------------------------------------------
+    # 8. Configure Keychain
+    # ---------------------------------------------------
+    - name: 🔑 Setup Keychain
+      env:
+        CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+      run: |
+        KEYCHAIN=build.keychain
+        security create-keychain -p "$CERT_PASSWORD" "$KEYCHAIN"
+        security unlock-keychain -p "$CERT_PASSWORD" "$KEYCHAIN"
+        security import ios/certs/appleDistribution.p12 -k "$KEYCHAIN" -P "$CERT_PASSWORD" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple: -s -k "$CERT_PASSWORD" "$KEYCHAIN"
 
-      # 8) Increment build number (uses agvtool across all targets)
-      - name: 🔢 Set iOS build number
-        working-directory: ios
-        run: |
-          BUILD_NUMBER="${{ github.run_number }}"
-          echo "Using CFBundleVersion: $BUILD_NUMBER"
-          # Ensure project has "Current Project Version" enabled in Build Settings
-          agvtool new-version -all "$BUILD_NUMBER" || {
-            echo "agvtool failed; falling back to Info.plist direct edit"
-            /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$(find . -name Info.plist -maxdepth 3 | head -n1)"
-          }
+    # ---------------------------------------------------
+    # 9. Install Provisioning Profiles
+    # ---------------------------------------------------
+    - name: 📄 Install Provisioning Profiles
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp ios/certs/*.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles
 
-      # 9) Decrypt signing assets
-      - name: 🔐 Decrypt signing assets
-        env:
-          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
-        run: |
-          echo "::add-mask::$CERT_PASSWORD"
-          mkdir -p ios/certs
-          for FILE in appleDistribution.p12 main_Target_release.mobileprovision ext_Target_release.mobileprovision; do
-            echo "Decrypting: $FILE"
-            openssl aes-256-cbc -md md5 -k "$CERT_PASSWORD" \
-              -in "pf_ios/${FILE}.enc" -out "ios/certs/${FILE}" -d
-          done
+    # ---------------------------------------------------
+    # 10. Bundle React Native JS
+    # ---------------------------------------------------
+    - name: 📦 Bundle React Native JS
+      run: |
+        npx react-native bundle \
+          --platform ios \
+          --entry-file index.js \
+          --bundle-output ios/main.jsbundle \
+          --assets-dest ios
 
-      # 10) Keychain + import cert
-      - name: 🔑 Setup keychain & import certificate
-        env:
-          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
-        run: |
-          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
-          security create-keychain -p "$CERT_PASSWORD" "$KEYCHAIN"
-          security set-keychain-settings -lut 3600 "$KEYCHAIN"
-          security list-keychains -s "$KEYCHAIN"
-          security default-keychain -s "$KEYCHAIN"
-          security unlock-keychain -p "$CERT_PASSWORD" "$KEYCHAIN"
+    # ---------------------------------------------------
+    # 11. Install xcpretty
+    # ---------------------------------------------------
+    - name: 💎 Install xcpretty
+      run: gem install xcpretty
 
-          security import ios/certs/appleDistribution.p12 -k "$KEYCHAIN" -P "$CERT_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "$CERT_PASSWORD" "$KEYCHAIN"
+    # ---------------------------------------------------
+    # 12. Build & Archive with Xcode
+    # ---------------------------------------------------
+    - name: 🏗️ Build & Archive iOS App
+      run: |
+        cd ios
+        mkdir -p build
 
-      # 11) Install provisioning profiles
-      - name: 📄 Install provisioning profiles
-        run: |
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp ios/certs/*.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-          ls -1 ~/Library/MobileDevice/Provisioning\ Profiles | sed 's/.mobileprovision$/***.mobileprovision/'
+        cp ../pf_ios/ExportOptions.plist ExportOptions.plist
 
-      # 12) ExportOptions.plist (must be app-store for TestFlight)
-      - name: 🧩 Prepare ExportOptions.plist
-        working-directory: ios
-        run: |
-          cp ../pf_ios/ExportOptions.plist ExportOptions.plist
-          echo "Ensuring export method is 'app-store' for TestFlight"
-          /usr/libexec/PlistBuddy -c "Set :method app-store" ExportOptions.plist || true
+        xcodebuild \
+          -workspace "$WORKSPACE" \
+          -scheme "$APP_SCHEME" \
+          -configuration "$CONFIGURATION" \
+          -sdk iphoneos \
+          -archivePath "build/${APP_SCHEME}.xcarchive" \
+          DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+          CODE_SIGN_STYLE=Manual \
+          CODE_SIGN_IDENTITY="Apple Distribution" \
+          archive | xcpretty
 
-      # 13) Build & Archive
-      - name: 🏗️ Build & Archive
-        working-directory: ios
-        run: |
-          set -o pipefail
-          mkdir -p build
-          xcodebuild clean \
-            -workspace "$WORKSPACE" \
-            -scheme "$APP_SCHEME" \
-            -configuration "$CONFIGURATION"
+        xcodebuild -exportArchive \
+          -archivePath "build/${APP_SCHEME}.xcarchive" \
+          -exportPath "build/export" \
+          -exportOptionsPlist ExportOptions.plist \
+          -allowProvisioningUpdates | xcpretty
 
-          ARCHIVE_PATH="$PWD/build/${APP_SCHEME}.xcarchive"
+    # ---------------------------------------------------
+    # 13. Upload IPA to TestFlight
+    # ---------------------------------------------------
+    - name: 🚀 Upload IPA to TestFlight
+      run: |
+        echo "$APP_STORE_CONNECT_API_KEY_BASE64" | base64 --decode > AuthKey.p8
 
-          xcodebuild -workspace "$WORKSPACE" \
-            -scheme "$APP_SCHEME" \
-            -configuration "$CONFIGURATION" \
-            -sdk iphoneos \
-            -archivePath "$ARCHIVE_PATH" \
-            DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            -allowProvisioningUpdates \
-            archive | xcpretty
+        printf "{\n\"key_id\":\"%s\",\n\"issuer_id\":\"%s\",\n\"key\":\"%s\",\n\"in_house\":false\n}\n" \
+          "$APP_STORE_CONNECT_API_KEY_ID" \
+          "$APP_STORE_CONNECT_ISSUER_ID" \
+          "$(awk '{printf "%s\\n", $0}' AuthKey.p8)" \
+          > fastlane_api_key.json
 
-      # 14) Export .ipa
-      - name: 📦 Export .ipa
-        working-directory: ios
-        run: |
-          set -o pipefail
-          ARCHIVE_PATH="$PWD/build/${APP_SCHEME}.xcarchive"
-          xcodebuild -exportArchive \
-            -archivePath "$ARCHIVE_PATH" \
-            -exportPath "$PWD/build/export" \
-            -exportOptionsPlist ExportOptions.plist \
-            -allowProvisioningUpdates \
-            -verbose | tee "$PWD/build/export/export.log"
+        sudo gem install fastlane -N
 
-          echo "IPA files:"
-          ls -la "$PWD/build/export"/*.ipa
+        fastlane deliver \
+          --api_key_path fastlane_api_key.json \
+          --ipa ios/build/export/*.ipa \
+          --skip_screenshots \
+          --skip_metadata \
+          --skip_app_version_update \
+          --submit_for_review false \
+          --force
 
-      # 15) Fastlane (TestFlight)
-      - name: 🚀 Upload to TestFlight (fastlane pilot)
-        env:
-          ASC_KEY_ID: ${{ env.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ env.ASC_ISSUER_ID }}
-          ASC_KEY_BASE64: ${{ env.ASC_KEY_BASE64 }}
-        shell: bash
-        run: |
-          echo "::group::Install fastlane"
-          gem install fastlane -N
-          echo "::endgroup::"
-
-          echo "::group::Create API key JSON"
-          echo "$ASC_KEY_BASE64" | base64 --decode > AuthKey.p8
-          echo "::add-mask::$(head -n 2 AuthKey.p8 || true)"
-          KEY_CONTENT=$(awk '{printf "%s\\n", $0}' AuthKey.p8 | sed 's/"/\\"/g')
-          cat > fastlane_api_key.json <<EOF
-          {
-            "key_id": "$ASC_KEY_ID",
-            "issuer_id": "$ASC_ISSUER_ID",
-            "key": "$KEY_CONTENT",
-            "in_house": false
-          }
-          EOF
-          echo "::endgroup::"
-
-          IPA_PATH="$(echo ios/build/export/*.ipa)"
-          echo "Uploading: $IPA_PATH"
-
-          # pilot is purpose-built for TestFlight; --skip_waiting_for_build_processing is optional
-          fastlane pilot upload \
-            --api_key_path fastlane_api_key.json \
-            --ipa "$IPA_PATH" \
-            --skip_screenshots \
-            --skip_waiting_for_build_processing \
-            --verbose
-
-          # Cleanup sensitive files
-          shred -u AuthKey.p8 fastlane_api_key.json || true
-
-      # 16) Upload artifacts (fixed path)
-      - name: ⤴️ Upload IPA & logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-appstore-build
-          path: |
-            ios/build/export/*.ipa
-            ios/build/export/export.log
-
-      # 17) Cleanup keychain (best-effort)
-      - name: 🧹 Cleanup keychain
-        if: always()
-        run: |
-          security list-keychains -d user | tr -d '"' | xargs -I {} security delete-keychain {} || true
+    # ---------------------------------------------------
+    # 14. Upload IPA as GitHub Artifact
+    # ---------------------------------------------------
+    - name: ☁️ Upload IPA Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-artifact
+        path: ios/build/export/*.ipa
