@@ -100,13 +100,13 @@ jobs:
           cd ..
 
       # -------------------------------------------------
-      # 5. Auto-Increment Build Number
+      # 5. Auto-Increment Build Number (React-Native iOS)
       # -------------------------------------------------
       - name: 🔢 Auto-Increment iOS Build Number
         run: |
           BUILD_NUMBER="${{ github.run_number }}"
           echo "Using CFBundleVersion: $BUILD_NUMBER"
-          plutil -replace CFBundleVersion -string "$BUILD_NUMBER" ios/Runner/Info.plist
+          plutil -replace CFBundleVersion -string "$BUILD_NUMBER" ios/nvRNSDKLiveAccountTestApp/Info.plist
 
       # -------------------------
       # 6️⃣ Decrypt Signing Assets
