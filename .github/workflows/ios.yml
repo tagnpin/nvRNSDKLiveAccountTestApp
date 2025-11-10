@@ -15,6 +15,7 @@ on:
       - 'babel.config.js'
       - 'tsconfig.json'
       - '.github/workflows/ios.yml'
+      - 'react-native-notifyvisitors/**'
 
 jobs:
   build-ios:

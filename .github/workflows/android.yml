@@ -14,6 +14,7 @@ on:
       - 'babel.config.js'
       - 'tsconfig.json'
       - '.github/workflows/android.yml'
+      - 'react-native-notifyvisitors/**'
 
 jobs:
   build-android-debug:
