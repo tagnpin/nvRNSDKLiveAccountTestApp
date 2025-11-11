@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
 
   # The Native Notifyvisitors-iOS-SDK from cocoapods.
   s.dependency 'notifyvisitors', '7.3.3'
-  s.dependency 'notifyvisitorsNudges', '0.0.2'
+  s.dependency 'notifyvisitorsNudges', '0.0.3'
 
 end

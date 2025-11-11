@@ -1568,7 +1568,7 @@
       "kind": "StringLiteral",
       "offset": 352,
       "length": 7,
-      "value": "\"0.0.2\""
+      "value": "\"0.0.3\""
     },
     {
       "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesFrameworkInfo.swift",
@@ -1677,59 +1677,24 @@
     },
     {
       "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/NVSDKInAppNudges\/Templates\/NativeDisplayNudges\/View\/NVNudgesNativeDisplayCardView.swift",
+      "kind": "StringLiteral",
+      "offset": 271,
+      "length": 145,
+      "value": "\"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><\/header>\""
+    },
+    {
+      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/NVSDKInAppNudges\/Templates\/NativeDisplayNudges\/View\/NVNudgesNativeDisplayCardView.swift",
       "kind": "BooleanLiteral",
-      "offset": 313,
+      "offset": 508,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/NVSDKInAppNudges\/Templates\/NativeDisplayNudges\/View\/NVNudgesNativeDisplayCardView.swift",
       "kind": "IntegerLiteral",
-      "offset": 408,
+      "offset": 603,
       "length": 1,
       "value": "4"
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 449,
-      "length": 28,
-      "value": "\"com.notifyvisitors.ios.sdk\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 506,
-      "length": 12,
-      "value": "\"nv_brandID\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 552,
-      "length": 17,
-      "value": "\"nv_LaunchedDate\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 605,
-      "length": 19,
-      "value": "\"nv_CountAppLaunch\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 799,
-      "length": 16,
-      "value": "\"nv_LaunchedNID\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesUserDefaultKeys.swift",
-      "kind": "StringLiteral",
-      "offset": 865,
-      "length": 19,
-      "value": "\"nv_isShownViewNID\""
     },
     {
       "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Model\/NVSDKNudgesInAppModal.swift",
@@ -1912,27 +1877,6 @@
       "offset": 1506,
       "length": 5,
       "value": "false"
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesConstants.swift",
-      "kind": "StringLiteral",
-      "offset": 230,
-      "length": 11,
-      "value": "\"nvBrandID\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesConstants.swift",
-      "kind": "StringLiteral",
-      "offset": 288,
-      "length": 28,
-      "value": "\"CFBundleShortVersionString\""
-    },
-    {
-      "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/Core\/Config\/NVSDKNudgesConstants.swift",
-      "kind": "StringLiteral",
-      "offset": 372,
-      "length": 145,
-      "value": "\"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><\/header>\""
     },
     {
       "filePath": "\/Users\/siddharth\/TagnpinProjects\/NotifyvisitorsProjects\/Native_IOS\/Framework_Projects_Notifyvisitors\/notify_ios_nudges\/notifyvisitorsNudges\/NVSDKInAppNudges\/Templates\/PIPVideoNudges\/View\/NVSDKPIPVideoNudgesView.swift",
