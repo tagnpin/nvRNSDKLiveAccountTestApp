@@ -9,7 +9,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.77.0)
   - hermes-engine/Pre-built (0.77.0)
   - notifyvisitors (7.3.3)
-  - notifyvisitorsNudges (0.0.2)
+  - notifyvisitorsNudges (0.0.3)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1212,9 +1212,9 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-notifyvisitors (4.6.1):
+  - react-native-notifyvisitors (4.6.2):
     - notifyvisitors (= 7.3.3)
-    - notifyvisitorsNudges (= 0.0.2)
+    - notifyvisitorsNudges (= 0.0.3)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (5.6.1):
     - DoubleConversion
@@ -1934,7 +1934,7 @@ SPEC CHECKSUMS:
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   hermes-engine: 1f783c3d53940aed0d2c84586f0b7a85ab7827ef
   notifyvisitors: 2d95d5ad1014efafbf611ed68b0675795bcb026e
-  notifyvisitorsNudges: fa392722882d5aee10cc7ed4fc75a062e5fb3771
+  notifyvisitorsNudges: 5d1d931d1c09107a0fa5d7cfc388ee3cc2e68cf2
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: f5c19ebdb8804b53ed029123eb69914356192fc8
   RCTRequired: 6ae6cebe470486e0e0ce89c1c0eabb998e7c51f4
@@ -1964,7 +1964,7 @@ SPEC CHECKSUMS:
   React-logger: 02e5802824aa9b15cb7df42e10a91abead83cd8d
   React-Mapbuffer: 99bd566147aaa78e872568be53ebca8a4449ddae
   React-microtasksnativemodule: 51e7813abf875408a0f367e473a65bbab6aa8481
-  react-native-notifyvisitors: 45015fd3312ad84821cbcbcb099466aa220a985d
+  react-native-notifyvisitors: 8facd77da8b35ba89153784eac0b1e576df115b8
   react-native-safe-area-context: 3ca252db05d82ea67f6d178fbd289ff832f5681b
   react-native-tracking-transparency: 15eb319f2b982070eb9831582af27d87badfa624
   react-native-vector-icons-evil-icons: 74d1fe2b104d1b4286359313713c7a4a9dcef1be
@@ -2005,6 +2005,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 78d74e245ed67bb94275a1316cdc170b9b7fe884
 
-PODFILE CHECKSUM: 1ece5ba171ecefd894589a76c0851005965937b2
+PODFILE CHECKSUM: 3dda833f48a40dbc2986f6282921b70a2b211eca
 
 COCOAPODS: 1.16.2
