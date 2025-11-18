@@ -28,8 +28,7 @@ class MainApplication : Application(), ReactApplication {
     private val nvBrandID: Int = BuildConfig.NV_BRAND_ID.toInt()             // Int
     private val nvSecreKey = BuildConfig.NV_BRAND_ENCRYPTION_KEY  // String
 
-    println("Brand ID: $brandId")
-    println("Encryption Key: $encryption")
+    
 
   //  private val nvBrandID = if (BuildConfig.DEBUG) 7577 else 8115
  //   private val nvSecreKey = if (BuildConfig.DEBUG) "DB52A5B00BB0D3BF426639A1B9FCF2F7" else "515CBDE82C402BDD85E4DFCCFD8904F6"
@@ -57,6 +56,8 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
+      println("Brand ID: $brandId")
+      println("Encryption Key: $encryption")
       RNNotifyvisitorsModule.register(this, nvBrandID, nvSecreKey);
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
