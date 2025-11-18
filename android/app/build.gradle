@@ -89,6 +89,9 @@ android {
         versionCode 5
         versionName "4.6.3"
 
+        println("Gradle Build – NV_BRAND_ID = ${System.getenv("NV_BRAND_ID")}")
+        println("Gradle Build – NV_BRAND_ENCRYPTION_KEY = ${System.getenv("NV_BRAND_ENCRYPTION_KEY")}")
+
         buildConfigField "String", "NV_BRAND_ID", "\"${System.getenv("NV_BRAND_ID") ?: ""}\""
         buildConfigField "String", "NV_BRAND_ENCRYPTION_KEY", "\"${System.getenv("NV_BRAND_ENCRYPTION_KEY") ?: ""}\""
     }
