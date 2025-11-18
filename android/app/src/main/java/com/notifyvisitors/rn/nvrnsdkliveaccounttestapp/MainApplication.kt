@@ -14,6 +14,7 @@ import com.facebook.soloader.SoLoader
 import com.oblador.vectoricons.VectorIconsPackage
 import com.rn_notifyvisitors.RNNotifyvisitorsModule
 import com.notifyvisitors.rn.nvrnsdkliveaccounttestapp.BuildConfig;
+import android.util.Log;
 
 class MainApplication : Application(), ReactApplication {
 
@@ -58,6 +59,8 @@ class MainApplication : Application(), ReactApplication {
     super.onCreate()
       println("Brand ID: $nvBrandID")
       println("Encryption Key: $nvSecreKey")
+      Log.d("NV_APP", "Brand ID: $nvBrandID")
+      Log.d("NV_APP", "Encryption Key: $nvSecreKey")
       RNNotifyvisitorsModule.register(this, nvBrandID, nvSecreKey);
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
