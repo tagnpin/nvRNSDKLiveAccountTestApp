@@ -57,10 +57,6 @@ class MainApplication : Application(), ReactApplication {
 
   override fun onCreate() {
     super.onCreate()
-      println("Brand ID: $nvBrandID")
-      println("Encryption Key: $nvSecreKey")
-      Log.e("NV_APP", "Brand ID: $nvBrandID")
-      Log.e("NV_APP", "Encryption Key: $nvSecreKey")
       RNNotifyvisitorsModule.register(this, nvBrandID, nvSecreKey);
     SoLoader.init(this, OpenSourceMergedSoMapping)
     if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
