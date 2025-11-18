@@ -14,7 +14,6 @@ import com.facebook.soloader.SoLoader
 import com.oblador.vectoricons.VectorIconsPackage
 import com.rn_notifyvisitors.RNNotifyvisitorsModule
 import com.notifyvisitors.rn.nvrnsdkliveaccounttestapp.BuildConfig;
-import android.util.Log;
 
 class MainApplication : Application(), ReactApplication {
 
