@@ -88,6 +88,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
         versionName "4.6.3"
+
+        buildConfigField "String", "NV_BRAND_ID", "\"${System.getenv("NV_BRAND_ID") ?: ""}\""
+        buildConfigField "String", "NV_BRAND_ENCRYPTION_KEY", "\"${System.getenv("NV_BRAND_ENCRYPTION_KEY") ?: ""}\""
     }
     signingConfigs {
         debug {
