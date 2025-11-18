@@ -23,6 +23,8 @@ jobs:
 
     env:
       BUILD_TYPE: ${{ vars.RN_ANDROID_BUILD_TYPE }}
+      NV_BRAND_ID: ${{ secrets.NV_BRAND_ID }}
+      NV_BRAND_ENCRYPTION_KEY: ${{ secrets.NV_BRAND_ENCRYPTION_KEY }}
 
     steps:
 
