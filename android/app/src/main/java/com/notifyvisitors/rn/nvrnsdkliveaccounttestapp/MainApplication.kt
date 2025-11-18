@@ -25,8 +25,10 @@ class MainApplication : Application(), ReactApplication {
   //  private val NOTIFYVISITORS_BRAND_ENCRYPTION_KEY: String = "515CBDE82C402BDD85E4DFCCFD8904F6"
   //  private val NOTIFYVISITORS_BRAND_ID: Int = 8115
 
-    private val nvBrandID: Int = BuildConfig.NV_BRAND_ID.toInt()             // Int
-    private val nvSecreKey = BuildConfig.NV_BRAND_ENCRYPTION_KEY  // String
+              // Int
+    private val nvBrandID: Int = BuildConfig.NV_BRAND_ID.toIntOrNull() ?: 0
+    private val nvSecreKey: String = BuildConfig.NV_BRAND_ENCRYPTION_KEY ?: ""
+  
 
     
 
