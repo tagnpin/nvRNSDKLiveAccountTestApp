@@ -9,28 +9,22 @@ class AppDelegate: RCTAppDelegate {
   override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     self.moduleName = "nvRNSDKLiveAccountTestApp"
     self.dependencyProvider = RCTAppDependencyProvider()
+    
 
     // You can add your custom initial props in the dictionary below.
     // They will be passed down to the ViewController used by React Native.
     
     self.initialProps = [:]
     
-    var nvAccountSecretKey = ""
-    var nvAccountBrnadID = 0
-
-#if DEBUG
-    nvAccountBrnadID = 7577
-    nvAccountSecretKey = "DB52A5B00BB0D3BF426639A1B9FCF2F7"
-#else
-    nvAccountBrnadID = 8115
-    nvAccountSecretKey = "515CBDE82C402BDD85E4DFCCFD8904F6"
-#endif
+    /// SAFELY read string values
+    let nvAccountSecretKey = Bundle.main.object(forInfoDictionaryKey: "nvSecretKey") as? String ?? ""
     
-//    nvAccountBrnadID = 7577
-//    nvAccountSecretKey = "DB52A5B00BB0D3BF426639A1B9FCF2F7"
+    /// SAFELY read int values
+    let nvAccountBrnadIDStr = Bundle.main.object(forInfoDictionaryKey: "nvBrandID") as? String
+    let nvAccountBrnadIDInt = Int(nvAccountBrnadIDStr ?? "") ?? 0
     
     UNUserNotificationCenter.current().delegate = self
-    RNNotifyvisitors.initialize(withBrandId: nvAccountBrnadID, secretKey: nvAccountSecretKey, launchingOptions: launchOptions)
+    RNNotifyvisitors.initialize(withBrandId: nvAccountBrnadIDInt, secretKey: nvAccountSecretKey, launchingOptions: launchOptions)
     RNNotifyvisitors.registerPush(withDelegate: self, app: application, launchOptions: launchOptions)
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
