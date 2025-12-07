@@ -28,6 +28,10 @@ jobs:
       RCT_NO_LAUNCH_PACKAGER: "true"
       NO_FLIPPER: "1"
 
+      # 📱 My ENV variables 
+      NV_BRAND_ID: ${{ vars.NV_BRAND_ID }}
+      NV_BRAND_ENCRYPTION_KEY: ${{ vars.NV_BRAND_ENCRYPTION_KEY }}
+
       # 📱 Xcode Configuration
       APP_SCHEME: nvRNSDKLiveAccountTestApp
       WORKSPACE: nvRNSDKLiveAccountTestApp.xcworkspace
@@ -49,6 +53,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          
+      # -------------------------
+      # 2️⃣ Generate iOS Environment File (Same as Android Env Logic)
+      # -------------------------
+      - name: 🔧 Generate iOS Env File
+        run: |
+          echo "NV_BRAND_ID=${NV_BRAND_ID}" > ios/AppEnv.xcconfig
+          echo "NV_BRAND_ENCRYPTION_KEY=${NV_BRAND_ENCRYPTION_KEY}" >> ios/AppEnv.xcconfig
+
+          echo "Generated iOS Env File:"
+          cat ios/AppEnv.xcconfig
+
 
       # -------------------------
       # 2️⃣ Setup Node
