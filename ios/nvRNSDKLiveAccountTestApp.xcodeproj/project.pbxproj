@@ -12,6 +12,9 @@
 		31559D41CB328E775FC15301 /* libPods-NVRNPushServiceExt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E609397CC3990771C5009A82 /* libPods-NVRNPushServiceExt.a */; };
 		35B4DF962EBB2C4D0060C511 /* NVRNPushServiceExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35B4DF8E2EBB2C4D0060C511 /* NVRNPushServiceExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		35B4DF9F2EBB2C570060C511 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 35B4DF9D2EBB2C570060C511 /* NotificationService.m */; };
+		35FDEEE32ECC8F4600802DC3 /* nvSecrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 35FDEEE22ECC8F4600802DC3 /* nvSecrets.xcconfig */; };
+		35FDEEE52ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 35FDEEE42ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig */; };
+		35FDEEE72ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 35FDEEE62ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9F2355727D174AA8D2A9A1D8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -54,6 +57,9 @@
 		35B4DF9D2EBB2C570060C511 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		35B4DFA12EBB31BB0060C511 /* NVRNPushServiceExtRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NVRNPushServiceExtRelease.entitlements; sourceTree = "<group>"; };
 		35C844A62E3E22630086B1C5 /* nvRNSDKLiveAccountTestApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "nvRNSDKLiveAccountTestApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		35FDEEE22ECC8F4600802DC3 /* nvSecrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = nvSecrets.xcconfig; sourceTree = "<group>"; };
+		35FDEEE42ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = nvRNAppConfig.release.xcconfig; sourceTree = "<group>"; };
+		35FDEEE62ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = nvRNAppConfig.debug.xcconfig; sourceTree = "<group>"; };
 		365ED78B85D4590C9DB7F2EE /* libPods-NotificationServiceExt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationServiceExt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-nvRNSDKLiveAccountTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nvRNSDKLiveAccountTestApp.debug.xcconfig"; path = "Target Support Files/Pods-nvRNSDKLiveAccountTestApp/Pods-nvRNSDKLiveAccountTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		56360025882E06761EF088DD /* Pods-NotificationServiceExt.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExt.debug.xcconfig"; path = "Target Support Files/Pods-NotificationServiceExt/Pods-NotificationServiceExt.debug.xcconfig"; sourceTree = "<group>"; };
@@ -100,6 +106,9 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				35C844A62E3E22630086B1C5 /* nvRNSDKLiveAccountTestApp-Bridging-Header.h */,
+				35FDEEE22ECC8F4600802DC3 /* nvSecrets.xcconfig */,
+				35FDEEE62ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig */,
+				35FDEEE42ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig */,
 			);
 			name = nvRNSDKLiveAccountTestApp;
 			sourceTree = "<group>";
@@ -259,8 +268,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				35FDEEE52ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				35FDEEE32ECC8F4600802DC3 /* nvSecrets.xcconfig in Resources */,
 				9F2355727D174AA8D2A9A1D8 /* PrivacyInfo.xcprivacy in Resources */,
+				35FDEEE72ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,7 +412,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-nvRNSDKLiveAccountTestApp.debug.xcconfig */;
+			baseConfigurationReference = 35FDEEE62ECC9C6F00802DC3 /* nvRNAppConfig.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -438,7 +450,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-nvRNSDKLiveAccountTestApp.release.xcconfig */;
+			baseConfigurationReference = 35FDEEE42ECC9C5000802DC3 /* nvRNAppConfig.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -622,6 +634,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
+				NV_BRAND_ID = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",

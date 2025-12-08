@@ -1,0 +1,11 @@
+//
+//  nvRNAppConfig.release.xcconfig
+//  nvRNSDKLiveAccountTestApp
+//
+//  Created by Notifyvisitors Macbook Air 4 on 18/11/25.
+//
+
+// Configuration settings file format documentation can be found at:
+
+#include "nvSecrets.xcconfig"
+#include "Pods/Target Support Files/Pods-nvRNSDKLiveAccountTestApp/Pods-nvRNSDKLiveAccountTestApp.release.xcconfig"

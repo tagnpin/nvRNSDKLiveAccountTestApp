@@ -75,3 +75,7 @@ yarn-error.log
 
 # RN_Notifyvisitors plugin files to be ignored 
 react-native-notifyvisitors/.git
+
+
+# Ignore secret config files anywhere in the project
+**/nvSecrets.xcconfig
