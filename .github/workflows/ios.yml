@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "NV_BRAND_ID=${NV_BRAND_ID}" > ios/nvSecrets.xcconfig
           echo "NV_BRAND_ENCRYPTION_KEY=${NV_BRAND_ENCRYPTION_KEY}" >> ios/nvSecrets.xcconfig
-          echo "Generated iOS Env File !!"
+          echo "Generated iOS Env File "
           cat ios/nvSecrets.xcconfig
 
       # -------------------------
