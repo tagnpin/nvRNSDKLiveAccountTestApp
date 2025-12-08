@@ -59,12 +59,10 @@ jobs:
       # -------------------------
       - name: 🔧 Generate iOS Env File
         run: |
-          echo "NV_BRAND_ID=${NV_BRAND_ID}" > ios/AppEnv.xcconfig
-          echo "NV_BRAND_ENCRYPTION_KEY=${NV_BRAND_ENCRYPTION_KEY}" >> ios/AppEnv.xcconfig
-
-          echo "Generated iOS Env File:"
-          cat ios/AppEnv.xcconfig
-
+          echo "NV_BRAND_ID=${NV_BRAND_ID}" > ios/nvSecrets.xcconfig
+          echo "NV_BRAND_ENCRYPTION_KEY=${NV_BRAND_ENCRYPTION_KEY}" >> ios/nvSecrets.xcconfig
+          echo "Generated iOS Env File."
+          cat ios/nvSecrets.xcconfig
 
       # -------------------------
       # 2️⃣ Setup Node
