@@ -18,11 +18,11 @@ on:
 
 jobs:
   build-android:
-    name: Android Build (${{ vars.RN_ANDROID_BUILD_TYPE }})
+    name: Android Build (${{ vars.RN_BUILD_TYPE }})
     runs-on: ubuntu-latest
 
     env:
-      BUILD_TYPE: ${{ vars.RN_ANDROID_BUILD_TYPE }}
+      BUILD_TYPE: ${{ vars.RN_BUILD_TYPE }}
       NV_BRAND_ID: ${{ vars.NV_BRAND_ID }}
       NV_BRAND_ENCRYPTION_KEY: ${{ vars.NV_BRAND_ENCRYPTION_KEY }}
 
