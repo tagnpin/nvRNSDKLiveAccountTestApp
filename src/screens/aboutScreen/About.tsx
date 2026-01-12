@@ -117,6 +117,22 @@ const About = () => {
     // });
   }
 
+  const runStressTest = (): void => {
+    console.log('🔴 Running stress test...');
+    
+    for (let i = 0; i < 15; i++) {
+      var attributes = {
+                "name":"test-user",
+                "email":"testuser@notify.com",
+                "mobile":"9999999999",
+                "userID":"hfbdsn738"
+              };
+      Notifyvisitors.setUserIdentifier(attributes, (result: string) => {
+          console.log(`Call ${i}:`, result);
+      });      
+    }
+  };
+
   let eventBtnTitle: string = `eventName = ${Constants.trackAboutScreenFirstEventName}`;
 
   return (
@@ -164,6 +180,12 @@ const About = () => {
         title="Go Back"
         id="btn2"
         onPress={() => onPresAppButtonHandler('dismiss')}
+      />
+      <AppButton
+        key="btn4"
+        title="⚠️ RUN STRESS TEST (WILL CRASH)"
+        id="btn2"
+        onPress={runStressTest}
       />
     </View>
   );
